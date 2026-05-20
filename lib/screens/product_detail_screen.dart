@@ -47,9 +47,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       );
     }
 
+    final p = product;
     final store = context.watch<StoreProvider>();
-    final isInWishlist = store.isInWishlist(product.id);
-    final isInCart = store.isInCart(product.id);
+    final isInWishlist = store.isInWishlist(p.id);
+    final isInCart = store.isInCart(p.id);
 
     return AppScaffold(
       body: PageContainer(
@@ -71,16 +72,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(child: AspectRatio(aspectRatio: 1, child: ClipRRect(borderRadius: BorderRadius.circular(12), child: CachedNetworkImage(imageUrl: product.image, fit: BoxFit.cover)))),
+                            Expanded(child: AspectRatio(aspectRatio: 1, child: ClipRRect(borderRadius: BorderRadius.circular(12), child: CachedNetworkImage(imageUrl: p.image, fit: BoxFit.cover)))),
                             const SizedBox(width: 32),
-                            Expanded(child: _ProductInfo(product: product, quantity: _quantity, onQuantity: (q) => setState(() => _quantity = q), isInWishlist: isInWishlist, isInCart: isInCart, store: store)),
+                            Expanded(child: _ProductInfo(product: p, quantity: _quantity, onQuantity: (q) => setState(() => _quantity = q), isInWishlist: isInWishlist, isInCart: isInCart, store: store)),
                           ],
                         )
                       : Column(
                           children: [
-                            AspectRatio(aspectRatio: 1, child: ClipRRect(borderRadius: BorderRadius.circular(12), child: CachedNetworkImage(imageUrl: product.image, fit: BoxFit.cover))),
+                            AspectRatio(aspectRatio: 1, child: ClipRRect(borderRadius: BorderRadius.circular(12), child: CachedNetworkImage(imageUrl: p.image, fit: BoxFit.cover))),
                             const SizedBox(height: 24),
-                            _ProductInfo(product: product, quantity: _quantity, onQuantity: (q) => setState(() => _quantity = q), isInWishlist: isInWishlist, isInCart: isInCart, store: store),
+                            _ProductInfo(product: p, quantity: _quantity, onQuantity: (q) => setState(() => _quantity = q), isInWishlist: isInWishlist, isInCart: isInCart, store: store),
                           ],
                         );
                 },

@@ -161,5 +161,5 @@ class StoreProvider extends ChangeNotifier {
   }
 
   String _randomId() =>
-      Random().nextDouble().toString(36).substring(2, 11);
+      Random().nextInt(0x7FFFFFFF).toRadixString(36);
 }
