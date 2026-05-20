@@ -143,22 +143,32 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
         ),
-        OutlinedButton.icon(
-          onPressed: () {
-            store.addNotification(
-              title: '테스트 알림',
-              message: '알림 기능이 정상적으로 작동합니다!',
-              type: NotificationType.success,
-              actionUrl: '/search',
-            );
-          },
-          icon: const Icon(Icons.notifications_none, size: 14),
-          label: const Text('알림 테스트', style: TextStyle(fontSize: 12)),
-          style: OutlinedButton.styleFrom(
-            foregroundColor: AppColors.slate500,
-            side: const BorderSide(color: AppColors.slate300, style: BorderStyle.solid),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              store.addNotification(
+                title: '테스트 알림',
+                message: '알림 기능이 정상적으로 작동합니다!',
+                type: NotificationType.success,
+                actionUrl: '/search',
+              );
+            },
+            borderRadius: BorderRadius.circular(12),
+            child: CustomPaint(
+              painter: _DashedBorderPainter(radius: 12, color: AppColors.slate300),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.notifications_none, size: 14, color: AppColors.slate500),
+                    const SizedBox(width: 6),
+                    Text('알림 테스트', style: TextStyle(fontSize: 12, color: AppColors.slate500)),
+                  ],
+                ),
+              ),
+            ),
           ),
         ),
       ],
@@ -198,6 +208,20 @@ class _HeroSection extends StatelessWidget {
                       center: const Alignment(0, -0.8),
                       radius: 1.2,
                       colors: [AppColors.accent.withValues(alpha: 0.45), Colors.transparent],
+                    ),
+                  ),
+                ),
+              ),
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: RadialGradient(
+                        center: Alignment.topRight,
+                        radius: 0.9,
+                        colors: [AppColors.accentSecondary.withValues(alpha: 0.25), Colors.transparent],
+                      ),
                     ),
                   ),
                 ),
@@ -273,19 +297,31 @@ class _HeroSection extends StatelessWidget {
                         const SizedBox(height: 64),
                         LayoutBuilder(
                           builder: (context, inner) {
-                            final cols = inner.maxWidth >= AppBreakpoints.sm ? 3 : 1;
-                            return GridView.count(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              crossAxisCount: cols,
-                              crossAxisSpacing: 16,
-                              mainAxisSpacing: 16,
-                              childAspectRatio: cols == 1 ? 2.8 : 1.35,
-                              children: const [
-                                _TrustBadge(icon: Icons.local_shipping, label: '무료 배송', desc: '5만원 이상 주문 시'),
-                                _TrustBadge(icon: Icons.shield, label: '정품 보증', desc: '100% 공식 유통'),
-                                _TrustBadge(icon: Icons.auto_awesome, label: '프리미엄 케어', desc: '전문 A/S 지원'),
-                              ],
+                            const badges = [
+                              _TrustBadge(icon: Icons.local_shipping, label: '무료 배송', desc: '5만원 이상 주문 시'),
+                              _TrustBadge(icon: Icons.shield, label: '정품 보증', desc: '100% 공식 유통'),
+                              _TrustBadge(icon: Icons.auto_awesome, label: '프리미엄 케어', desc: '전문 A/S 지원'),
+                            ];
+                            if (inner.maxWidth >= AppBreakpoints.sm) {
+                              return Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: badges
+                                    .map((b) => Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 8),
+                                            child: b,
+                                          ),
+                                        ))
+                                    .toList(),
+                              );
+                            }
+                            return Column(
+                              children: badges
+                                  .map((b) => Padding(
+                                        padding: const EdgeInsets.only(bottom: 16),
+                                        child: b,
+                                      ))
+                                  .toList(),
                             );
                           },
                         ),
@@ -312,7 +348,8 @@ class _TrustBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      width: double.infinity,
+      padding: const EdgeInsets.all(20), // p-5
       decoration: BoxDecoration(
         color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
@@ -321,7 +358,7 @@ class _TrustBadge extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: const Color(0xFFA5B4FC), size: 24),
+          Icon(icon, color: const Color(0xFFA5B4FC), size: 24), // h-6 w-6
           const SizedBox(height: 8),
           Text(label, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 14)),
           const SizedBox(height: 4),
@@ -394,7 +431,9 @@ class _CategoryColumn extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(colors: cat.gradient),
               borderRadius: BorderRadius.circular(16),
-              boxShadow: [BoxShadow(color: cat.gradient.first.withValues(alpha: 0.25), blurRadius: 12, offset: const Offset(0, 4))],
+              boxShadow: [
+                BoxShadow(color: cat.gradient.first.withValues(alpha: 0.3), blurRadius: 16, offset: const Offset(0, 4)),
+              ],
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -410,12 +449,45 @@ class _CategoryColumn extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 16), // mb-4
         ...catProducts.take(2).map((p) => Padding(
-              padding: const EdgeInsets.only(bottom: 16),
+              padding: const EdgeInsets.only(bottom: 16), // space-y-4
               child: ProductCard(product: p),
             )),
       ],
     );
   }
+}
+
+class _DashedBorderPainter extends CustomPainter {
+  final double radius;
+  final Color color;
+
+  _DashedBorderPainter({required this.radius, required this.color});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 1;
+    final path = Path()..addRRect(RRect.fromRectAndRadius(Offset.zero & size, Radius.circular(radius)));
+    canvas.drawPath(_dashPath(path, 5, 4), paint);
+  }
+
+  Path _dashPath(Path source, double dashWidth, double dashSpace) {
+    final dest = Path();
+    for (final metric in source.computeMetrics()) {
+      var distance = 0.0;
+      while (distance < metric.length) {
+        final len = (distance + dashWidth < metric.length) ? dashWidth : metric.length - distance;
+        dest.addPath(metric.extractPath(distance, distance + len), Offset.zero);
+        distance += dashWidth + dashSpace;
+      }
+    }
+    return dest;
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

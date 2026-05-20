@@ -88,11 +88,11 @@ class ProductCard extends StatelessWidget {
                           }
                         },
                         child: Container(
-                          padding: const EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10), // p-2.5
                           decoration: BoxDecoration(
                             color: isInWishlist ? AppColors.rose500 : Colors.white.withValues(alpha: 0.9),
                             shape: BoxShape.circle,
-                            boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 8)],
+                            boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10)],
                           ),
                           child: Icon(
                             isInWishlist ? Icons.favorite : Icons.favorite_border,
@@ -112,11 +112,11 @@ class ProductCard extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      product.category,
+                      product.category.toUpperCase(),
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
-                        letterSpacing: 0.8,
+                        letterSpacing: 1.2,
                         color: AppColors.accent,
                       ),
                     ),
@@ -160,7 +160,7 @@ class ProductCard extends StatelessWidget {
                             store.addToast(type: ToastType.success, message: '장바구니에 추가되었습니다.');
                           },
                           child: Container(
-                            padding: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10), // rounded-xl p-2.5
                             decoration: BoxDecoration(
                               color: isInCart ? AppColors.emerald500 : AppColors.indigo600,
                               borderRadius: BorderRadius.circular(12),

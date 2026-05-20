@@ -6,6 +6,7 @@ import '../data/products.dart';
 import '../models/product.dart';
 import '../providers/store_provider.dart';
 import '../theme/app_theme.dart';
+import '../theme/layout.dart';
 import 'primary_button.dart';
 
 class GNB extends StatefulWidget {
@@ -269,14 +270,13 @@ class _GNBState extends State<GNB> {
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                 child: _buildSearchBar(),
               ),
-            if (MediaQuery.sizeOf(context).width >= 768)
+            if (MediaQuery.sizeOf(context).width >= AppBreakpoints.md)
               Container(
                 decoration: const BoxDecoration(border: Border(top: BorderSide(color: AppColors.slate100))),
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: navCategories.map((cat) {
+                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: navCategories.map((cat) {
                       final href = '/category/${cat.slug}';
                       final isActive = location == href;
                       return Padding(
@@ -310,7 +310,6 @@ class _GNBState extends State<GNB> {
                         ),
                       );
                     }).toList(),
-                  ),
                 ),
               ),
           ],

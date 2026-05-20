@@ -126,7 +126,7 @@ class AppFooter extends StatelessWidget {
         const SizedBox(height: 16),
         ...items.map((item) => Padding(
               padding: const EdgeInsets.only(bottom: 12),
-              child: Text(item, style: const TextStyle(color: AppColors.slate400, fontSize: 14, height: 1.4)),
+              child: Text(item, style: const TextStyle(color: AppColors.slate400, fontSize: 14, height: 1.6)),
             )),
       ],
     );

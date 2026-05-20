@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/app_theme.dart';
 import '../theme/layout.dart';
 import 'footer.dart';
 import 'gnb.dart';
@@ -18,18 +19,59 @@ class AppScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return ToastOverlay(
       child: Scaffold(
-        body: Column(
+        backgroundColor: AppColors.background,
+        body: Stack(
           children: [
-            const GNB(),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    body,
-                    if (showFooter) const AppFooter(),
-                  ],
+            // Next.js body::before subtle gradients
+            Positioned.fill(
+              child: IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: RadialGradient(
+                      center: const Alignment(0.5, -0.2),
+                      radius: 1.2,
+                      colors: [
+                        AppColors.accent.withValues(alpha: 0.12),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
                 ),
               ),
+            ),
+            Positioned.fill(
+              child: IgnorePointer(
+                child: Align(
+                  alignment: Alignment.topRight,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      gradient: RadialGradient(
+                        center: Alignment.topRight,
+                        radius: 0.8,
+                        colors: [
+                          AppColors.accentSecondary.withValues(alpha: 0.08),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Column(
+              children: [
+                const GNB(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        body,
+                        if (showFooter) const AppFooter(),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -62,7 +104,7 @@ class PageContainer extends StatelessWidget {
   }
 }
 
-/// Next.js: grid grid-cols-1 sm:2 lg:3 xl:4 gap-6
+/// Next.js: grid gap-6, viewport breakpoints sm:2 lg:3 xl:4
 class ProductGrid extends StatelessWidget {
   final List<Widget> products;
   final int? crossAxisCount;
@@ -79,7 +121,8 @@ class ProductGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final cols = crossAxisCount ?? productGridColumns(constraints.maxWidth);
+        final viewportW = MediaQuery.sizeOf(context).width;
+        final cols = crossAxisCount ?? productGridColumnsForViewport(viewportW);
         final itemWidth = (constraints.maxWidth - gap * (cols - 1)) / cols;
 
         return Wrap(

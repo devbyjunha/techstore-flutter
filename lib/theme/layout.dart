@@ -7,9 +7,10 @@ class AppBreakpoints {
   static const maxContent = 1280.0; // max-w-7xl
 }
 
-int productGridColumns(double width) {
-  if (width >= AppBreakpoints.xl) return 4;
-  if (width >= AppBreakpoints.lg) return 3;
-  if (width >= AppBreakpoints.sm) return 2;
+/// Tailwind viewport breakpoints: sm:2, lg:3, xl:4
+int productGridColumnsForViewport(double viewportWidth) {
+  if (viewportWidth >= AppBreakpoints.xl) return 4;
+  if (viewportWidth >= AppBreakpoints.lg) return 3;
+  if (viewportWidth >= AppBreakpoints.sm) return 2;
   return 1;
 }
