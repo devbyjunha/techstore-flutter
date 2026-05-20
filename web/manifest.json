@@ -1,0 +1,11 @@
+{
+  "name": "TechStore",
+  "short_name": "TechStore",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#6366f1",
+  "description": "최신 기술 제품을 합리적인 가격으로 제공하는 온라인 쇼핑몰",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false
+}
