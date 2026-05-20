@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../theme/layout.dart';
 import 'footer.dart';
 import 'gnb.dart';
 import 'toast_overlay.dart';
@@ -44,7 +45,7 @@ class PageContainer extends StatelessWidget {
   const PageContainer({
     super.key,
     required this.child,
-    this.maxWidth = 1280,
+    this.maxWidth = AppBreakpoints.maxContent,
   });
 
   @override
@@ -61,40 +62,32 @@ class PageContainer extends StatelessWidget {
   }
 }
 
+/// Next.js: grid grid-cols-1 sm:2 lg:3 xl:4 gap-6
 class ProductGrid extends StatelessWidget {
-  final List<dynamic> products;
-  final int crossAxisCount;
+  final List<Widget> products;
+  final int? crossAxisCount;
+  final double gap;
 
   const ProductGrid({
     super.key,
     required this.products,
-    this.crossAxisCount = 0,
+    this.crossAxisCount,
+    this.gap = 24,
   });
-
-  int _columns(double width) {
-    if (crossAxisCount > 0) return crossAxisCount;
-    if (width >= 1280) return 4;
-    if (width >= 1024) return 3;
-    if (width >= 640) return 2;
-    return 1;
-  }
 
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final cols = _columns(constraints.maxWidth);
-        return GridView.builder(
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: cols,
-            crossAxisSpacing: 24,
-            mainAxisSpacing: 24,
-            childAspectRatio: 0.72,
-          ),
-          itemCount: products.length,
-          itemBuilder: (context, index) => products[index],
+        final cols = crossAxisCount ?? productGridColumns(constraints.maxWidth);
+        final itemWidth = (constraints.maxWidth - gap * (cols - 1)) / cols;
+
+        return Wrap(
+          spacing: gap,
+          runSpacing: gap,
+          children: products
+              .map((w) => SizedBox(width: itemWidth, child: w))
+              .toList(),
         );
       },
     );

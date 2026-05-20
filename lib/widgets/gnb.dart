@@ -183,7 +183,9 @@ class _GNBState extends State<GNB> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: Row(
+              child: SizedBox(
+                height: 48,
+                child: Row(
                 children: [
                   GestureDetector(
                     onTap: () => context.go('/'),
@@ -259,6 +261,7 @@ class _GNBState extends State<GNB> {
                       ),
                     ),
                 ],
+              ),
               ),
             ),
             if (!isWide)
@@ -460,11 +463,17 @@ class _IconAction extends StatelessWidget {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        IconButton(
-          key: key,
-          icon: Icon(icon, size: 22),
-          color: AppColors.slate500,
-          onPressed: onTap,
+        Material(
+          color: Colors.transparent,
+          borderRadius: BorderRadius.circular(12),
+          child: InkWell(
+            onTap: onTap,
+            borderRadius: BorderRadius.circular(12),
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Icon(icon, size: 22, color: AppColors.slate500),
+            ),
+          ),
         ),
         if (badge > 0)
           Positioned(

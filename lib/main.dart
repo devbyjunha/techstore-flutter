@@ -21,6 +21,13 @@ class TechStoreApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
         routerConfig: appRouter,
+        builder: (context, child) {
+          final mq = MediaQuery.of(context);
+          return MediaQuery(
+            data: mq.copyWith(textScaler: TextScaler.noScaling),
+            child: child ?? const SizedBox.shrink(),
+          );
+        },
       ),
     );
   }
