@@ -1,6 +1,6 @@
 # TechStore Flutter
 
-[techstore-nextjs](https://github.com/YOUR_USER/techstore-nextjs)와 동일한 UI·기능을 제공하는 **멀티 플랫폼** Flutter 앱입니다.
+`techstore-nextjs`와 동일한 UI·기능을 제공하는 **멀티 플랫폼** Flutter 앱입니다.
 
 ## 생성 위치
 
