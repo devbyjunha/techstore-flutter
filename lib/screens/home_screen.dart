@@ -226,14 +226,11 @@ class _HeroSection extends StatelessWidget {
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: isLg ? 128 : 96,
-                ),
+              ContentWidth(
+                padding: EdgeInsets.symmetric(vertical: isLg ? 128 : 96),
                 child: Center(
                   child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 768),
+                    constraints: const BoxConstraints(maxWidth: AppBreakpoints.maxWidth3xl),
                     child: Column(
                       children: [
                         Container(
@@ -269,10 +266,13 @@ class _HeroSection extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 24),
-                        const Text(
-                          'Apple, Samsung 등 글로벌 브랜드의 최신 제품을 합리적인 가격으로. TechStore만의 프리미엄 쇼핑 경험.',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(color: AppColors.slate400, fontSize: 18, height: 1.6),
+                        ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: AppBreakpoints.maxWidthXl),
+                          child: const Text(
+                            'Apple, Samsung 등 글로벌 브랜드의 최신 제품을 합리적인 가격으로. TechStore만의 프리미엄 쇼핑 경험.',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(color: AppColors.slate400, fontSize: 18, height: 1.6),
+                          ),
                         ),
                         const SizedBox(height: 40),
                         Wrap(
@@ -281,17 +281,7 @@ class _HeroSection extends StatelessWidget {
                           alignment: WrapAlignment.center,
                           children: [
                             PrimaryButton(label: '상품 둘러보기', icon: Icons.arrow_forward, onPressed: onBrowse),
-                            OutlinedButton(
-                              onPressed: onSale,
-                              style: OutlinedButton.styleFrom(
-                                foregroundColor: Colors.white,
-                                side: BorderSide(color: Colors.white.withValues(alpha: 0.2)),
-                                backgroundColor: Colors.white.withValues(alpha: 0.05),
-                                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                              ),
-                              child: Text('특가 $saleCount개 보기', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                            ),
+                            _HeroSaleButton(saleCount: saleCount, onPressed: onSale),
                           ],
                         ),
                         const SizedBox(height: 64),
@@ -334,6 +324,43 @@ class _HeroSection extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+/// Next.js: rounded-2xl border border-white/20 bg-white/5 px-8 py-3.5
+class _HeroSaleButton extends StatelessWidget {
+  final int saleCount;
+  final VoidCallback onPressed;
+
+  const _HeroSaleButton({required this.saleCount, required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(16),
+        child: Ink(
+          decoration: BoxDecoration(
+            color: Colors.white.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+            child: Text(
+              '특가 $saleCount개 보기',
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w600,
+                fontSize: 16,
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

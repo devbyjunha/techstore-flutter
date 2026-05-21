@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../theme/layout.dart';
 
 class AppFooter extends StatelessWidget {
   const AppFooter({super.key});
@@ -18,11 +19,9 @@ class AppFooter extends StatelessWidget {
               ),
             ),
           ),
-          Padding(
+          ContentWidth(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 56),
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1280),
-              child: Column(
+            child: Column(
                 children: [
                   LayoutBuilder(
                     builder: (context, constraints) {
@@ -75,7 +74,6 @@ class AppFooter extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
           ),
         ],
       ),
@@ -102,9 +100,12 @@ class AppFooter extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 16),
-        const Text(
-          '최신 기술 제품을 합리적인 가격으로 제공하는 프리미엄 온라인 쇼핑몰입니다. 고객 만족을 최우선으로 하는 서비스를 제공합니다.',
-          style: TextStyle(color: AppColors.slate400, fontSize: 14, height: 1.6),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: AppBreakpoints.maxWidthMd),
+          child: const Text(
+            '최신 기술 제품을 합리적인 가격으로 제공하는 프리미엄 온라인 쇼핑몰입니다. 고객 만족을 최우선으로 하는 서비스를 제공합니다.',
+            style: TextStyle(color: AppColors.slate400, fontSize: 14, height: 1.6),
+          ),
         ),
         const SizedBox(height: 24),
         Wrap(

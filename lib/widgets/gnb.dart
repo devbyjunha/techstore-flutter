@@ -180,12 +180,11 @@ class _GNBState extends State<GNB> {
       color: Colors.white.withValues(alpha: 0.72),
       child: Container(
         decoration: AppTheme.glassPanel(),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              child: SizedBox(
-                height: 48,
+        child: ContentWidth(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 72,
                 child: Row(
                 children: [
                   GestureDetector(
@@ -264,19 +263,17 @@ class _GNBState extends State<GNB> {
                 ],
               ),
               ),
-            ),
-            if (!isWide)
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                child: _buildSearchBar(),
-              ),
-            if (MediaQuery.sizeOf(context).width >= AppBreakpoints.md)
-              Container(
-                decoration: const BoxDecoration(border: Border(top: BorderSide(color: AppColors.slate100))),
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: navCategories.map((cat) {
+              if (!isWide)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: _buildSearchBar(),
+                ),
+              if (MediaQuery.sizeOf(context).width >= AppBreakpoints.md)
+                Container(
+                  decoration: const BoxDecoration(border: Border(top: BorderSide(color: AppColors.slate100))),
+                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  child: Row(
+                    children: navCategories.map((cat) {
                       final href = '/category/${cat.slug}';
                       final isActive = location == href;
                       return Padding(
@@ -310,9 +307,10 @@ class _GNBState extends State<GNB> {
                         ),
                       );
                     }).toList(),
+                  ),
                 ),
-              ),
-          ],
+            ],
+          ),
         ),
       ),
     );
