@@ -26,6 +26,12 @@ class AppColors {
 }
 
 class AppTheme {
+  /// glass-panel: backdrop-blur 없이 단색에 가깝게 (웹 스크롤 성능)
+  static BoxDecoration get glassPanelDecoration => BoxDecoration(
+        color: Colors.white.withValues(alpha: 0.92),
+        border: Border(bottom: BorderSide(color: AppColors.slate200.withValues(alpha: 0.6))),
+      );
+
   static ThemeData get lightTheme {
     final textTheme = GoogleFonts.interTextTheme();
     return ThemeData(
@@ -71,7 +77,7 @@ class AppTheme {
         ),
       );
 
-  static BoxDecoration glassPanel({double opacity = 0.72}) => BoxDecoration(
+  static BoxDecoration glassPanel({double opacity = 0.92}) => BoxDecoration(
         color: Colors.white.withValues(alpha: opacity),
         border: Border(bottom: BorderSide(color: AppColors.slate200.withValues(alpha: 0.6))),
       );

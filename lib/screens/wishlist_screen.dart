@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import '../widgets/network_product_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -102,7 +102,7 @@ class _WishlistCard extends StatelessWidget {
             child: Stack(
               fit: StackFit.expand,
               children: [
-                CachedNetworkImage(imageUrl: p.image, fit: BoxFit.cover),
+                NetworkProductImage(imageUrl: p.image, fit: BoxFit.cover),
                 Positioned(
                   top: 12,
                   right: 12,

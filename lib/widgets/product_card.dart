@@ -1,10 +1,10 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import '../models/product.dart';
 import '../providers/store_provider.dart';
 import '../theme/app_theme.dart';
+import 'network_product_image.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -43,13 +43,8 @@ class ProductCard extends StatelessWidget {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    CachedNetworkImage(
-                      imageUrl: product.image,
-                      fit: BoxFit.cover,
-                      placeholder: (_, __) => Container(color: AppColors.slate100),
-                      errorWidget: (_, __, ___) => const Center(
-                        child: Icon(Icons.image_not_supported, color: AppColors.slate400, size: 40),
-                      ),
+                    SizedBox.expand(
+                      child: NetworkProductImage(imageUrl: product.image, fit: BoxFit.cover),
                     ),
                     if (product.isOnSale)
                       Positioned(

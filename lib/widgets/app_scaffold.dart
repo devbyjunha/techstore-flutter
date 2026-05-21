@@ -17,61 +17,22 @@ class AppScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 초기 배포 구조: Stack/그라데이션/커스텀 ScrollPhysics 없음 → 웹 스크롤 체감 유지
     return ToastOverlay(
       child: Scaffold(
         backgroundColor: AppColors.background,
-        body: Stack(
+        body: Column(
           children: [
-            // Next.js body::before subtle gradients
-            Positioned.fill(
-              child: IgnorePointer(
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    gradient: RadialGradient(
-                      center: const Alignment(0.5, -0.2),
-                      radius: 1.2,
-                      colors: [
-                        AppColors.accent.withValues(alpha: 0.12),
-                        Colors.transparent,
-                      ],
-                    ),
-                  ),
+            const GNB(),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    body,
+                    if (showFooter) const AppFooter(),
+                  ],
                 ),
               ),
-            ),
-            Positioned.fill(
-              child: IgnorePointer(
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      gradient: RadialGradient(
-                        center: Alignment.topRight,
-                        radius: 0.8,
-                        colors: [
-                          AppColors.accentSecondary.withValues(alpha: 0.08),
-                          Colors.transparent,
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Column(
-              children: [
-                const GNB(),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        body,
-                        if (showFooter) const AppFooter(),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
             ),
           ],
         ),

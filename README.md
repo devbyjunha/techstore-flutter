@@ -99,8 +99,14 @@ flutter create . --platforms=web,ios,android
 
 flutter pub get
 
-# 웹 (PC 브라우저)
+# 웹 (PC 브라우저) — Chrome 자동 실행 없이, 기존 탭에서 열기
+flutter run -d web-server --web-port=8080
+
+# (대안) Chrome 자동 실행
 flutter run -d chrome
+
+# 배포와 동일한 스크롤·성능 체감 (release 권장)
+flutter run -d web-server --web-port=8080 --release
 
 # iOS 시뮬레이터
 flutter run -d ios
@@ -163,6 +169,21 @@ techstore-flutter/
 | 설치 직후에도 동일 | 터미널 앱을 완전히 종료 후 다시 실행 |
 
 프로젝트 코드 오류가 아니라 **로컬 개발 환경** 문제입니다.
+
+### 상품 이미지가 깨져 보일 때 (엑박)
+
+Flutter Web(CanvasKit)은 외부 이미지를 캔버스에 그릴 때 **CORS** 제한이 있습니다. Next.js는 `next/image`가 서버를 통해 이미지를 불러와 이 문제가 없습니다.
+
+앱은 웹에서 `WebHtmlElementStrategy.prefer`(브라우저 `<img>` 태그)로 이미지를 표시합니다. **앱을 완전히 재시작**한 뒤 다시 확인하세요.
+
+여전히 안 보이면 네트워크에서 `images.unsplash.com` 접근이 막혔을 수 있습니다. 브라우저에서 상품 이미지 URL을 직접 열어 보세요.
+
+### 웹 스크롤이 느리거나 답답할 때
+
+UI 정렬 작업 중 **Stack + RadialGradient 배경**이 추가되면서 스크롤이 느려진 적이 있습니다. 현재는 초기 구조(단순 `Column` + `SingleChildScrollView`)로 되돌려 두었습니다.
+
+1. **debug 모드** (`flutter run` 기본)는 release보다 무겁습니다. 배포 전에는 `--release`로 확인하세요.
+2. `flutter run -d web-server --web-port=8080 --release` 로 로컬에서 배포와 동일한 체감을 확인할 수 있습니다.
 
 ### `flutter create` / `flutter pub get` 실패
 

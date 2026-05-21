@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import '../widgets/network_product_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -72,14 +72,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       ? Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(child: AspectRatio(aspectRatio: 1, child: ClipRRect(borderRadius: BorderRadius.circular(12), child: CachedNetworkImage(imageUrl: p.image, fit: BoxFit.cover)))),
+                            Expanded(child: AspectRatio(aspectRatio: 1, child: ClipRRect(borderRadius: BorderRadius.circular(12), child: NetworkProductImage(imageUrl: p.image, fit: BoxFit.cover)))),
                             const SizedBox(width: 32),
                             Expanded(child: _ProductInfo(product: p, quantity: _quantity, onQuantity: (q) => setState(() => _quantity = q), isInWishlist: isInWishlist, isInCart: isInCart, store: store)),
                           ],
                         )
                       : Column(
                           children: [
-                            AspectRatio(aspectRatio: 1, child: ClipRRect(borderRadius: BorderRadius.circular(12), child: CachedNetworkImage(imageUrl: p.image, fit: BoxFit.cover))),
+                            AspectRatio(aspectRatio: 1, child: ClipRRect(borderRadius: BorderRadius.circular(12), child: NetworkProductImage(imageUrl: p.image, fit: BoxFit.cover))),
                             const SizedBox(height: 24),
                             _ProductInfo(product: p, quantity: _quantity, onQuantity: (q) => setState(() => _quantity = q), isInWishlist: isInWishlist, isInCart: isInCart, store: store),
                           ],

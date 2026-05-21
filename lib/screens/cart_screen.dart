@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import '../widgets/network_product_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -92,7 +92,7 @@ class _CartList extends StatelessWidget {
                 children: [
                   ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: CachedNetworkImage(imageUrl: item.product.image, width: 96, height: 96, fit: BoxFit.cover),
+                    child: NetworkProductImage(imageUrl: item.product.image, width: 96, height: 96, fit: BoxFit.cover),
                   ),
                   const SizedBox(width: 16),
                   Expanded(

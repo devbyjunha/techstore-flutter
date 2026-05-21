@@ -81,89 +81,106 @@ class _GNBState extends State<GNB> {
     };
   }
 
-  Widget _buildSearchBar({bool fullWidth = true}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+  /// Next.js: form relative, suggestions `absolute top-[calc(100%+8px)]`
+  static const double _searchFieldHeight = 48;
+
+  Widget _buildSearchBar() {
+    return Stack(
+      clipBehavior: Clip.none,
       children: [
-        TextField(
-          controller: _searchController,
-          onChanged: _onSearchChanged,
-          onSubmitted: (_) => _submitSearch(),
-          onTap: () {
-            if (_searchController.text.trim().isNotEmpty) {
-              setState(() => _showSuggestions = true);
-            }
-          },
-          decoration: InputDecoration(
-            hintText: '상품명, 브랜드, 카테고리로 검색...',
-            hintStyle: const TextStyle(color: AppColors.slate400, fontSize: 14),
-            filled: true,
-            fillColor: AppColors.slate50.withValues(alpha: 0.8),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 44, vertical: 14),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: AppColors.slate200.withValues(alpha: 0.8)),
+        SizedBox(
+          height: _searchFieldHeight,
+          child: TextField(
+            controller: _searchController,
+            onChanged: _onSearchChanged,
+            onSubmitted: (_) => _submitSearch(),
+            onTap: () {
+              if (_searchController.text.trim().isNotEmpty) {
+                setState(() => _showSuggestions = true);
+              }
+            },
+            style: const TextStyle(fontSize: 14, height: 1.2),
+            decoration: InputDecoration(
+              hintText: '상품명, 브랜드, 카테고리로 검색...',
+              hintStyle: const TextStyle(color: AppColors.slate400, fontSize: 14),
+              filled: true,
+              fillColor: AppColors.slate50.withValues(alpha: 0.8),
+              isDense: true,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 44, vertical: 12),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(color: AppColors.slate200.withValues(alpha: 0.8)),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: BorderSide(color: AppColors.slate200.withValues(alpha: 0.8)),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(16),
+                borderSide: const BorderSide(color: AppColors.accent),
+              ),
+              prefixIcon: IconButton(
+                icon: const Icon(Icons.search, size: 20, color: AppColors.slate400),
+                onPressed: _submitSearch,
+              ),
+              suffixIcon: _searchController.text.isNotEmpty
+                  ? IconButton(
+                      icon: const Icon(Icons.close, size: 18),
+                      onPressed: () {
+                        _searchController.clear();
+                        _onSearchChanged('');
+                      },
+                    )
+                  : null,
             ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: BorderSide(color: AppColors.slate200.withValues(alpha: 0.8)),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-              borderSide: const BorderSide(color: AppColors.accent),
-            ),
-            prefixIcon: IconButton(
-              icon: const Icon(Icons.search, size: 20, color: AppColors.slate400),
-              onPressed: _submitSearch,
-            ),
-            suffixIcon: _searchController.text.isNotEmpty
-                ? IconButton(
-                    icon: const Icon(Icons.close, size: 18),
-                    onPressed: () {
-                      _searchController.clear();
-                      _onSearchChanged('');
-                    },
-                  )
-                : null,
           ),
         ),
         if (_showSuggestions && _suggestions.isNotEmpty)
-          Container(
-            margin: const EdgeInsets.only(top: 8),
-            constraints: const BoxConstraints(maxHeight: 320),
-            decoration: BoxDecoration(
-              color: Colors.white,
+          Positioned(
+            top: _searchFieldHeight + 8,
+            left: 0,
+            right: 0,
+            child: Material(
+              elevation: 12,
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColors.slate200.withValues(alpha: 0.8)),
-              boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 24)],
-            ),
-            child: ListView.separated(
-              shrinkWrap: true,
-              itemCount: _suggestions.length,
-              separatorBuilder: (_, __) => const Divider(height: 1),
-              itemBuilder: (context, index) {
-                final p = _suggestions[index];
-                return ListTile(
-                  onTap: () {
-                    setState(() => _showSuggestions = false);
-                    context.go('/product/${p.id}');
-                  },
-                  leading: Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12),
-                      gradient: const LinearGradient(
-                        colors: [Color(0xFFE0E7FF), Color(0xFFEDE9FE)],
+              color: Colors.white,
+              child: Container(
+                constraints: const BoxConstraints(maxHeight: 320),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.slate200.withValues(alpha: 0.8)),
+                ),
+                child: ListView.separated(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  itemCount: _suggestions.length,
+                  separatorBuilder: (_, __) => const Divider(height: 1),
+                  itemBuilder: (context, index) {
+                    final p = _suggestions[index];
+                    return ListTile(
+                      onTap: () {
+                        setState(() => _showSuggestions = false);
+                        context.go('/product/${p.id}');
+                      },
+                      leading: Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFFE0E7FF), Color(0xFFEDE9FE)],
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  title: Text(p.name, maxLines: 1, overflow: TextOverflow.ellipsis),
-                  subtitle: Text(p.category, style: const TextStyle(fontSize: 13)),
-                  trailing: Text('${formatPrice(p.price)}원',
-                      style: const TextStyle(fontWeight: FontWeight.w600, color: AppColors.accent, fontSize: 13)),
-                );
-              },
+                      title: Text(p.name, maxLines: 1, overflow: TextOverflow.ellipsis),
+                      subtitle: Text(p.category, style: const TextStyle(fontSize: 13)),
+                      trailing: Text('${formatPrice(p.price)}원',
+                          style: const TextStyle(
+                              fontWeight: FontWeight.w600, color: AppColors.accent, fontSize: 13)),
+                    );
+                  },
+                ),
+              ),
             ),
           ),
       ],
@@ -183,10 +200,14 @@ class _GNBState extends State<GNB> {
         child: ContentWidth(
           child: Column(
             children: [
-              SizedBox(
-                height: 72,
-                child: Row(
-                children: [
+              // Next: min-h-[4.5rem] items-center py-3 lg:py-0
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: isWide ? 0 : 12),
+                child: SizedBox(
+                  height: isWide ? 72 : null,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
                   GestureDetector(
                     onTap: () => context.go('/'),
                     child: Row(
@@ -209,10 +230,10 @@ class _GNBState extends State<GNB> {
                     ),
                   ),
                   if (isWide) ...[
-                    const SizedBox(width: 32),
+                    const SizedBox(width: 16),
                     Expanded(child: _buildSearchBar()),
+                    const SizedBox(width: 8),
                   ],
-                  const Spacer(),
                   _IconAction(
                     icon: Icons.notifications_outlined,
                     badge: store.unreadNotificationCount,
@@ -260,12 +281,16 @@ class _GNBState extends State<GNB> {
                         fontSize: 14,
                       ),
                     ),
-                ],
-              ),
+                    ],
+                  ),
+                ),
               ),
               if (!isWide)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 16),
+                Container(
+                  decoration: const BoxDecoration(
+                    border: Border(top: BorderSide(color: AppColors.slate100)),
+                  ),
+                  padding: const EdgeInsets.fromLTRB(0, 16, 0, 20),
                   child: _buildSearchBar(),
                 ),
               if (MediaQuery.sizeOf(context).width >= AppBreakpoints.md)
